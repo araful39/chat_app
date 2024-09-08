@@ -1,15 +1,32 @@
 import 'package:chat_app/components/my_button.dart';
 import 'package:chat_app/components/my_text_field.dart';
+import 'package:chat_app/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class RegisterPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final Function()? onTap;
-  RegisterPage({super.key,required this.onTap});
+  RegisterPage({super.key, required this.onTap});
 // login method
-  void register() {}
+  void register() async {
+    final auth = AuthService();
+    if(_passwordController.text==_confirmPasswordController.text){
+    try{
+      auth.signUpWithEmailPassword(
+          _emailController.text, _passwordController.text);
+    }catch (e){
+      EasyLoading.showError(e.toString());
+    }
+    }
+    else{
+      EasyLoading.showError("Password don't match!");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
