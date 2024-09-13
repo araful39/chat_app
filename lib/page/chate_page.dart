@@ -1,3 +1,4 @@
+import 'package:chat_app/components/chat_bubble.dart';
 import 'package:chat_app/components/my_text_field.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
 import 'package:chat_app/services/chat/chat_services.dart';
@@ -22,7 +23,14 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
+
       appBar: AppBar(
+        scrolledUnderElevation: 0,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        foregroundColor: Colors.grey,
+        centerTitle: true,
         title: Text(receiverEmail),
       ),
       body: Column(
@@ -43,31 +51,52 @@ class ChatPage extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-           return  ListView(
-              children: snapshot.data!.docs
-                  .map((doc) => _buildMessageItem(doc))
-                  .toList(),
-            );
-
+          return ListView(
+            children: snapshot.data!.docs
+                .map((doc) => _buildMessageItem(doc))
+                .toList(),
+          );
         });
   }
 
   Widget _buildMessageItem(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-
-    return Text(data["message"]);
+    bool isCurrentUser = data['senderID'] == _authService.getCurrentUser()!.uid;
+    var alignment =
+        isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
+    return Container(
+        alignment: alignment,
+        child: Column(
+          crossAxisAlignment:
+              isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          children: [
+           ChatBubble(message: data["message"], isCurrentUser: isCurrentUser),
+          ],
+        ));
   }
 
   Widget _buildUserInput() {
-    return Row(
-      children: [
-        Expanded(
-            child: MyTextField(
-          controller: _messageController,
-          hintText: "Meassage",
-        )),
-        IconButton(onPressed: sendMessage, icon: const Icon(Icons.arrow_upward))
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 30.0),
+      child: Row(
+        children: [
+          Expanded(
+              child: MyTextField(
+            controller: _messageController,
+            hintText: "Meassage",
+          )),
+          Container(
+            margin: EdgeInsets.only(right: 25),
+              decoration: BoxDecoration(color: Colors.green,
+              shape: BoxShape.circle),
+              child: IconButton(
+                  onPressed: sendMessage,
+                  icon: const Icon(
+                    Icons.arrow_upward,
+                    color: Colors.white,
+                  )))
+        ],
+      ),
     );
   }
 }
