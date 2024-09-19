@@ -1,3 +1,4 @@
+import 'package:chat_app/api/api.dart';
 import 'package:chat_app/components/my_button.dart';
 import 'package:chat_app/components/my_text_field.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
@@ -5,10 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class LoginPage extends StatelessWidget {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
 final void Function()?onTap;
-  LoginPage({super.key, required this.onTap});
+   LoginPage({super.key, required this.onTap});
+
+  final TextEditingController _emailController = TextEditingController();
+
+  final TextEditingController _passwordController = TextEditingController();
+
 // login method
   void login()async{
     final authService=AuthService();
@@ -19,6 +23,7 @@ catch (e){
   EasyLoading.showError(e.toString());
 }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

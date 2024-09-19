@@ -1,3 +1,4 @@
+import 'package:chat_app/api/api.dart';
 import 'package:chat_app/components/my_drawer.dart';
 import 'package:chat_app/components/user_tile.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
@@ -6,18 +7,29 @@ import 'package:flutter/material.dart';
 
 import 'chate_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({super.key});
-  final ChatServices _chatServices = ChatServices();
-  final AuthService _authService = AuthService();
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+  @override
+  void initState() {
+
+    super.initState();
+    FirebaseApi().initNotifications();
+  }
+  final ChatServices _chatServices = ChatServices();
+
+  final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -53,7 +65,7 @@ class HomePage extends StatelessWidget {
 
   Widget _buildUserListItem(
       Map<String, dynamic> userData, BuildContext context) {
-    if(userData['email'] !=_authService.getCurrentUser()!.email){
+    if (userData['email'] != _authService.getCurrentUser()!.email) {
       return UserTile(
         text: userData['email'],
         onTap: () {
@@ -61,13 +73,13 @@ class HomePage extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (context) => ChatPage(
-                    receiverEmail: userData['email'], receiverID: userData['uid'],
-                  )));
+                        receiverEmail: userData['email'],
+                        receiverID: userData['uid'],
+                      )));
         },
       );
-    }else{
-     return Container();
+    } else {
+      return Container();
     }
   }
-
 }
