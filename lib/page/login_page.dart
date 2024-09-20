@@ -1,4 +1,3 @@
-import 'package:chat_app/api/api.dart';
 import 'package:chat_app/components/my_button.dart';
 import 'package:chat_app/components/my_text_field.dart';
 import 'package:chat_app/services/auth/auth_service.dart';

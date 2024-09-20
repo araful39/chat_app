@@ -1,4 +1,3 @@
-import 'package:chat_app/api/api.dart';
 import 'package:chat_app/components/my_drawer.dart';
 import 'package:chat_app/components/user_tile.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
@@ -7,21 +6,9 @@ import 'package:flutter/material.dart';
 
 import 'chate_page.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   HomePage({super.key});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-
-  @override
-  void initState() {
-
-    super.initState();
-    FirebaseApi().initNotifications();
-  }
   final ChatServices _chatServices = ChatServices();
 
   final AuthService _authService = AuthService();
